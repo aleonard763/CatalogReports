@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{F14B399A-7131-4C87-9E4B-1186C45EF12D}") = "CatalogReports", "CatalogReports\CatalogReports.rptproj", "{5BDA8E0A-4D0A-4849-A7CC-9E0917E0F291}"
+Project("{F14B399A-7131-4C87-9E4B-1186C45EF12D}") = "CatalogReports", "CatalogReports.rptproj", "{5BDA8E0A-4D0A-4849-A7CC-9E0917E0F291}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
