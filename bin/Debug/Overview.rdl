@@ -320,7 +320,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>="Overview: " &amp; First(Fields!folder_name.Value, "ExecutionInformation") &amp; "\" &amp; First(Fields!project_name.Value, "ExecutionInformation") &amp; "\" &amp; First(Fields!package_name.Value, "ExecutionInformation") &amp; " started: " &amp; First(Fields!start_time.Value, "ExecutionInformation")</Value>
+                <Value>="Overview" &amp; Iif(IsNothing(Parameters!ExecutionID.Value), " (for Last Executed Package)", "") &amp; ": " &amp; First(Fields!folder_name.Value, "ExecutionInformation") &amp; "\" &amp; First(Fields!project_name.Value, "ExecutionInformation") &amp; "\" &amp; First(Fields!package_name.Value, "ExecutionInformation") &amp; " started: " &amp; First(Fields!start_time.Value, "ExecutionInformation")</Value>
                 <Style>
                   <FontFamily>Tahoma</FontFamily>
                   <FontSize>12pt</FontSize>
@@ -625,7 +625,7 @@
                           <Color>LightGrey</Color>
                           <Style>Solid</Style>
                         </Border>
-                        <BackgroundColor>=Iif(Fields!ExecutionStatus.Value = "Succeeded","Green",Iif(Fields!ExecutionStatus.Value = "Failed","Red","White"))</BackgroundColor>
+                        <BackgroundColor>=Iif(Fields!ExecutionStatus.Value = "Succeeded","Green",Iif(Fields!ExecutionStatus.Value = "Failed","Maroon","White"))</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1756,7 +1756,7 @@
   ,value_set
   ,runtime_override
 From [catalog].execution_parameter_values
-Where execution_id = @ExecutionID 
+Where execution_id = Coalesce(@ExecutionID, (Select Top 1 execution_id From [catalog].execution_parameter_values Order By execution_id DESC))
   And (value_set = 1
        Or 
 	   parameter_name Not LIKE 'CM.%')
@@ -1840,7 +1840,7 @@ Order By parameter_name</CommandText>
 	Join [catalog].executables AS e
 	  On es.execution_id =e.execution_id 
      And es.executable_id =e.executable_id
-    Where e.execution_id = @ExecutionID 
+    Where e.execution_id = Coalesce(@ExecutionID, (Select Top 1 execution_id From [catalog].executable_statistics Order By execution_id DESC))
 Order By e.package_name, es.execution_path</CommandText>
       </Query>
       <Fields>
@@ -1929,7 +1929,7 @@ Select @environmentName =
 	  End) + '\' + environment_name
   End As env
 From ref
-Where execution_id = @ExecutionID)
+Where execution_id = Coalesce(@ExecutionID, (Select Top 1 execution_id From ref Order By execution_id DESC)))
 
  -- Execution Information
 ;With ve As
@@ -1991,7 +1991,7 @@ Select
 ,op_type
 ,Environmentname
 FROM ve
-WHERE execution_id = @ExecutionID
+WHERE execution_id = Coalesce(@ExecutionID, (Select Top 1 execution_id From ve Order By execution_id DESC))
 
 -- Property
 SELECT
@@ -2004,7 +2004,7 @@ SELECT
 FROM 
   [catalog].execution_property_override_values
 WHERE 
-  execution_id = @ExecutionID
+  execution_id = Coalesce(@ExecutionID, (Select Top 1 execution_id From [catalog].execution_property_override_values Order By execution_id DESC))
 ORDER BY 
   property_path</CommandText>
       </Query>
@@ -2063,6 +2063,7 @@ ORDER BY
   <ReportParameters>
     <ReportParameter Name="ExecutionID">
       <DataType>String</DataType>
+      <Nullable>true</Nullable>
       <Prompt>Execution ID</Prompt>
       <Hidden>true</Hidden>
     </ReportParameter>
