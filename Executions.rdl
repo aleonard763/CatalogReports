@@ -192,6 +192,8 @@
                                 <FontFamily>Tahoma</FontFamily>
                                 <FontSize>11pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
+                                <TextDecoration>=Iif(Parameters!Status.Value = 4,"None","Underline")</TextDecoration>
+                                <Color>=Iif(Parameters!Status.Value = 4, "Black", "Blue")</Color>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -201,6 +203,21 @@
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>textbox4</rd:DefaultName>
+                      <ActionInfo>
+                        <Actions>
+                          <Action>
+                            <Drillthrough>
+                              <ReportName>=Iif(Parameters!Status.Value = 4, Nothing, "Executions")</ReportName>
+                              <Parameters>
+                                <Parameter Name="Status">
+                                  <Value>4</Value>
+                                  <Omit>=Iif(Parameters!Status.Value = 4, True, False)</Omit>
+                                </Parameter>
+                              </Parameters>
+                            </Drillthrough>
+                          </Action>
+                        </Actions>
+                      </ActionInfo>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -213,11 +230,12 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="textbox8">
+                    <Textbox Name="txtRunning">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -229,6 +247,8 @@
                                 <FontFamily>Tahoma</FontFamily>
                                 <FontSize>11pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
+                                <TextDecoration>=Iif(Parameters!Status.Value = 2, "None", "Underline")</TextDecoration>
+                                <Color>=Iif(Parameters!Status.Value = 2, "Black", "Blue")</Color>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -237,7 +257,21 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>textbox3</rd:DefaultName>
+                      <ActionInfo>
+                        <Actions>
+                          <Action>
+                            <Drillthrough>
+                              <ReportName>=Iif(Parameters!Status.Value = 2, Nothing, "Executions")</ReportName>
+                              <Parameters>
+                                <Parameter Name="Status">
+                                  <Value>2</Value>
+                                  <Omit>=Iif(Parameters!Status.Value = 2, True, False)</Omit>
+                                </Parameter>
+                              </Parameters>
+                            </Drillthrough>
+                          </Action>
+                        </Actions>
+                      </ActionInfo>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -266,6 +300,8 @@
                                 <FontFamily>Tahoma</FontFamily>
                                 <FontSize>11pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
+                                <TextDecoration>=Iif(Parameters!Status.Value = 7, "None", "Underline")</TextDecoration>
+                                <Color>=Iif(Parameters!Status.Value = 7, "Black", "Blue")</Color>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -275,6 +311,21 @@
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>textbox5</rd:DefaultName>
+                      <ActionInfo>
+                        <Actions>
+                          <Action>
+                            <Drillthrough>
+                              <ReportName>=Iif(Parameters!Status.Value = 7, Nothing, "Executions")</ReportName>
+                              <Parameters>
+                                <Parameter Name="Status">
+                                  <Value>7</Value>
+                                  <Omit>=Iif(Parameters!Status.Value = 7, True, False)</Omit>
+                                </Parameter>
+                              </Parameters>
+                            </Drillthrough>
+                          </Action>
+                        </Actions>
+                      </ActionInfo>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -1241,14 +1292,17 @@
         <ZIndex>1</ZIndex>
         <Style />
       </Tablix>
-      <Textbox Name="textbox1">
+      <Textbox Name="txtExecutions">
         <CanGrow>true</CanGrow>
         <KeepTogether>true</KeepTogether>
         <Paragraphs>
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>Executions</Value>
+                <Value>=Iif(IsNothing(Parameters!Status.Value),"Executions: All",
+  Iif(Parameters!Status.Value = 2, "Executions: Running", 
+    Iif(Parameters!Status.Value = 4, "Executions: Failed", 
+	  Iif(Parameters!Status.Value = 7, "Executions: Succeeded", "Executions"))))</Value>
                 <Style>
                   <FontFamily>Tahoma</FontFamily>
                   <FontSize>20pt</FontSize>
@@ -1260,13 +1314,15 @@
             <Style />
           </Paragraph>
         </Paragraphs>
-        <rd:DefaultName>textbox1</rd:DefaultName>
         <Top>0.01389in</Top>
         <Left>0.5in</Left>
         <Height>0.36in</Height>
-        <Width>1.625in</Width>
+        <Width>4.73958in</Width>
         <ZIndex>2</ZIndex>
         <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
           <PaddingLeft>2pt</PaddingLeft>
           <PaddingRight>2pt</PaddingRight>
           <PaddingTop>2pt</PaddingTop>
@@ -1284,7 +1340,6 @@
             </Action>
           </Actions>
         </ActionInfo>
-        <Top>0in</Top>
         <Height>0.36in</Height>
         <Width>0.42708in</Width>
         <ZIndex>3</ZIndex>
@@ -1295,6 +1350,63 @@
           </Border>
         </Style>
       </Image>
+      <Textbox Name="txtAll">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>All</Value>
+                <Style>
+                  <FontFamily>Tahoma</FontFamily>
+                  <FontSize>11pt</FontSize>
+                  <FontWeight>Bold</FontWeight>
+                  <TextDecoration>Underline</TextDecoration>
+                  <Color>Blue</Color>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style>
+              <TextAlign>Center</TextAlign>
+            </Style>
+          </Paragraph>
+        </Paragraphs>
+        <ActionInfo>
+          <Actions>
+            <Action>
+              <Drillthrough>
+                <ReportName>Executions</ReportName>
+                <Parameters>
+                  <Parameter Name="Status">
+                    <Value>=Nothing</Value>
+                  </Parameter>
+                </Parameters>
+              </Drillthrough>
+            </Action>
+          </Actions>
+        </ActionInfo>
+        <Top>1.07694in</Top>
+        <Left>4.06944in</Left>
+        <Height>0.38542in</Height>
+        <Width>1.17014in</Width>
+        <ZIndex>4</ZIndex>
+        <Visibility>
+          <Hidden>=Iif(IsNothing(Parameters!Status.Value), True, False)</Hidden>
+        </Visibility>
+        <ToolTip>View All Executions</ToolTip>
+        <Style>
+          <Border>
+            <Color>LightGrey</Color>
+            <Style>None</Style>
+          </Border>
+          <VerticalAlign>Middle</VerticalAlign>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
     </ReportItems>
     <Height>2.34208in</Height>
     <Style />
@@ -1393,6 +1505,9 @@ SELECT
           <QueryParameter Name="@WindowEnd">
             <Value>=Parameters!WindowEnd.Value</Value>
           </QueryParameter>
+          <QueryParameter Name="@Status">
+            <Value>=Parameters!Status.Value</Value>
+          </QueryParameter>
         </QueryParameters>
         <CommandText>SELECT 
 	[execution_id], 
@@ -1419,6 +1534,7 @@ FROM [catalog].[executions]
 WHERE 
 (CONVERT (datetime, [start_time]) &gt;= @WindowBegin) AND
 (CONVERT (datetime, [start_time]) &lt;= DATEADD(day,1,@WindowEnd))
+And [status] = Coalesce(@Status, [status])
 Order By execution_id DESC</CommandText>
       </Query>
       <Fields>
@@ -1485,6 +1601,60 @@ Order By execution_id DESC</CommandText>
         </DataSetReference>
       </DefaultValue>
       <Prompt>Window End</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="Status">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <DefaultValue>
+        <Values>
+          <Value xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
+        </Values>
+      </DefaultValue>
+      <Prompt>Status</Prompt>
+      <Hidden>true</Hidden>
+      <ValidValues>
+        <ParameterValues>
+          <ParameterValue>
+            <Value>1</Value>
+            <Label>Created</Label>
+          </ParameterValue>
+          <ParameterValue>
+            <Value>2</Value>
+            <Label>Running</Label>
+          </ParameterValue>
+          <ParameterValue>
+            <Value>3</Value>
+            <Label>Cancelled</Label>
+          </ParameterValue>
+          <ParameterValue>
+            <Value>4</Value>
+            <Label>Failed</Label>
+          </ParameterValue>
+          <ParameterValue>
+            <Value>5</Value>
+            <Label>Pending</Label>
+          </ParameterValue>
+          <ParameterValue>
+            <Value>6</Value>
+            <Label>Ended Unexpectedly</Label>
+          </ParameterValue>
+          <ParameterValue>
+            <Value>7</Value>
+            <Label>Succeeded</Label>
+          </ParameterValue>
+          <ParameterValue>
+            <Value>8</Value>
+            <Label>Stopping</Label>
+          </ParameterValue>
+          <ParameterValue>
+            <Value>9</Value>
+            <Label>Completed</Label>
+          </ParameterValue>
+          <ParameterValue>
+            <Label>(None)</Label>
+          </ParameterValue>
+        </ParameterValues>
+      </ValidValues>
     </ReportParameter>
   </ReportParameters>
   <EmbeddedImages>
