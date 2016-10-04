@@ -333,7 +333,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -348,6 +347,8 @@
                               <Value>=Fields!event_name.Value</Value>
                               <Style>
                                 <FontFamily>Tahoma</FontFamily>
+                                <TextDecoration>Underline</TextDecoration>
+                                <Color>Blue</Color>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -355,6 +356,20 @@
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>event_name1</rd:DefaultName>
+                      <ActionInfo>
+                        <Actions>
+                          <Action>
+                            <Drillthrough>
+                              <ReportName>Messages</ReportName>
+                              <Parameters>
+                                <Parameter Name="EventName">
+                                  <Value>=Fields!event_name.Value</Value>
+                                </Parameter>
+                              </Parameters>
+                            </Drillthrough>
+                          </Action>
+                        </Actions>
+                      </ActionInfo>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -1488,6 +1503,10 @@
           <QueryParameter Name="@ExecutionID">
             <Value>=Parameters!ExecutionID.Value</Value>
           </QueryParameter>
+          <QueryParameter Name="@EventName">
+            <Value>=Parameters!EventName.Value</Value>
+            <rd:UserDefined>true</rd:UserDefined>
+          </QueryParameter>
           <QueryParameter Name="@ExecutionPath">
             <Value>=Parameters!ExecutionPath.Value</Value>
           </QueryParameter>
@@ -1544,6 +1563,7 @@ FROM
 SELECT *
 FROM
     msgEnv
+WHERE event_Name = Coalesce(@EventName, event_Name)
 ORDER BY [message_time] DESC</CommandText>
         <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
       </Query>
@@ -1893,6 +1913,18 @@ From msgEnv</CommandText>
         </Field>
       </Fields>
     </DataSet>
+    <DataSet Name="EventNames">
+      <Query>
+        <DataSourceName>SSISDB</DataSourceName>
+        <CommandText>Select distinct event_name From [catalog].[event_messages]</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="event_name">
+          <DataField>event_name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
   </DataSets>
   <ReportParameters>
     <ReportParameter Name="ExecutionID">
@@ -1906,6 +1938,24 @@ From msgEnv</CommandText>
       <Nullable>true</Nullable>
       <Prompt>ExecutionPath</Prompt>
       <Hidden>true</Hidden>
+    </ReportParameter>
+    <ReportParameter Name="EventName">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <DefaultValue>
+        <Values>
+          <Value xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" />
+        </Values>
+      </DefaultValue>
+      <Prompt>EventName</Prompt>
+      <Hidden>true</Hidden>
+      <ValidValues>
+        <DataSetReference>
+          <DataSetName>EventNames</DataSetName>
+          <ValueField>event_name</ValueField>
+          <LabelField>event_name</LabelField>
+        </DataSetReference>
+      </ValidValues>
     </ReportParameter>
   </ReportParameters>
   <EmbeddedImages>
