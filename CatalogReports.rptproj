@@ -10,6 +10,10 @@
   <DataSets />
   <Reports>
     <ProjectItem>
+      <Name>ExecutionInformation.rdl</Name>
+      <FullPath>ExecutionInformation.rdl</FullPath>
+    </ProjectItem>
+    <ProjectItem>
       <Name>Executions.rdl</Name>
       <FullPath>Executions.rdl</FullPath>
     </ProjectItem>
@@ -24,14 +28,6 @@
     <ProjectItem>
       <Name>Performance.rdl</Name>
       <FullPath>Performance.rdl</FullPath>
-    </ProjectItem>
-    <ProjectItem>
-      <Name>ExecutionInformation.rdl</Name>
-      <FullPath>ExecutionInformation.rdl</FullPath>
-    </ProjectItem>
-    <ProjectItem>
-      <Name>Copy of Overview.rdl</Name>
-      <FullPath>Copy of Overview.rdl</FullPath>
     </ProjectItem>
   </Reports>
   <Configurations>
