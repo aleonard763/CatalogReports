@@ -1916,7 +1916,9 @@ From msgEnv</CommandText>
     <DataSet Name="EventNames">
       <Query>
         <DataSourceName>SSISDB</DataSourceName>
-        <CommandText>Select distinct event_name From [catalog].[event_messages]</CommandText>
+        <CommandText>Select distinct event_name From [catalog].[event_messages]
+Union Select NULL as event_name
+</CommandText>
       </Query>
       <Fields>
         <Field Name="event_name">

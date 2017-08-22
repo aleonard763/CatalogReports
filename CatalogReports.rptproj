@@ -25,6 +25,14 @@
       <Name>Performance.rdl</Name>
       <FullPath>Performance.rdl</FullPath>
     </ProjectItem>
+    <ProjectItem>
+      <Name>ExecutionInformation.rdl</Name>
+      <FullPath>ExecutionInformation.rdl</FullPath>
+    </ProjectItem>
+    <ProjectItem>
+      <Name>Copy of Overview.rdl</Name>
+      <FullPath>Copy of Overview.rdl</FullPath>
+    </ProjectItem>
   </Reports>
   <Configurations>
     <Configuration>
