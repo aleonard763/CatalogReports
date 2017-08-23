@@ -702,7 +702,7 @@
         <Top>0.85889in</Top>
         <Left>1.78471in</Left>
         <Height>0.22917in</Height>
-        <Width>0.875in</Width>
+        <Width>0.70833in</Width>
         <ZIndex>7</ZIndex>
         <Style>
           <Border>
@@ -733,6 +733,104 @@
           </Border>
         </Style>
       </Subreport>
+      <Textbox Name="PreviousExecutionID">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>&lt;&lt; Previous Execution</Value>
+                <Style>
+                  <TextDecoration>Underline</TextDecoration>
+                  <Color>Blue</Color>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <ActionInfo>
+          <Actions>
+            <Action>
+              <Drillthrough>
+                <ReportName>Overview</ReportName>
+                <Parameters>
+                  <Parameter Name="ExecutionID">
+                    <Value>=First(Fields!PreviousExecutionID.Value, "ExecutionIDs")</Value>
+                  </Parameter>
+                </Parameters>
+              </Drillthrough>
+            </Action>
+          </Actions>
+        </ActionInfo>
+        <Top>0.8589in</Top>
+        <Left>2.56249in</Left>
+        <Height>0.22916in</Height>
+        <Width>1.45833in</Width>
+        <ZIndex>9</ZIndex>
+        <Visibility>
+          <Hidden>=Iif(First(Fields!PreviousExecutionID.Value, "ExecutionIDs") Is Nothing, True, False)</Hidden>
+        </Visibility>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
+      <Textbox Name="NextExecutionID">
+        <CanGrow>true</CanGrow>
+        <KeepTogether>true</KeepTogether>
+        <Paragraphs>
+          <Paragraph>
+            <TextRuns>
+              <TextRun>
+                <Value>Next Execution &gt;&gt;</Value>
+                <Style>
+                  <TextDecoration>Underline</TextDecoration>
+                  <Color>Blue</Color>
+                </Style>
+              </TextRun>
+            </TextRuns>
+            <Style />
+          </Paragraph>
+        </Paragraphs>
+        <ActionInfo>
+          <Actions>
+            <Action>
+              <Drillthrough>
+                <ReportName>Overview</ReportName>
+                <Parameters>
+                  <Parameter Name="ExecutionID">
+                    <Value>=First(Fields!NextExecutionID.Value, "ExecutionIDs")</Value>
+                  </Parameter>
+                </Parameters>
+              </Drillthrough>
+            </Action>
+          </Actions>
+        </ActionInfo>
+        <Top>0.85888in</Top>
+        <Left>4.09027in</Left>
+        <Height>0.22916in</Height>
+        <Width>1.25in</Width>
+        <ZIndex>10</ZIndex>
+        <Visibility>
+          <Hidden>=Iif(First(Fields!NextExecutionID.Value, "ExecutionIDs") Is Nothing, True, False)</Hidden>
+        </Visibility>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+          <PaddingLeft>2pt</PaddingLeft>
+          <PaddingRight>2pt</PaddingRight>
+          <PaddingTop>2pt</PaddingTop>
+          <PaddingBottom>2pt</PaddingBottom>
+        </Style>
+      </Textbox>
     </ReportItems>
     <Height>6.25041in</Height>
     <Style />
@@ -1084,6 +1182,33 @@ ORDER BY
         <Field Name="Environmentname">
           <DataField>Environmentname</DataField>
           <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+    <DataSet Name="ExecutionIDs">
+      <Query>
+        <DataSourceName>SSISDB</DataSourceName>
+        <QueryParameters>
+          <QueryParameter Name="@ExecutionID">
+            <Value>=Parameters!ExecutionID.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <CommandText>Select PreviousExecutionID 
+, NextExecutionID 
+From
+(Select execution_id, LAG(execution_id) OVER (ORDER BY execution_id) AS PreviousExecutionID
+     , LEAD(execution_id) OVER (ORDER BY execution_id) AS NextExecutionID
+From [catalog].executions) q
+Where q.execution_id = @ExecutionID</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="PreviousExecutionID">
+          <DataField>PreviousExecutionID</DataField>
+          <rd:TypeName>System.Int64</rd:TypeName>
+        </Field>
+        <Field Name="NextExecutionID">
+          <DataField>NextExecutionID</DataField>
+          <rd:TypeName>System.Int64</rd:TypeName>
         </Field>
       </Fields>
     </DataSet>

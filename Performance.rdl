@@ -707,17 +707,17 @@
         <ChartCategoryHierarchy>
           <ChartMembers>
             <ChartMember>
-              <Group Name="Chart1_CategoryGroup">
+              <Group Name="Chart1_CategoryGroup1">
                 <GroupExpressions>
-                  <GroupExpression>=Fields!execution_id.Value</GroupExpression>
+                  <GroupExpression>=Fields!shortStartTime.Value</GroupExpression>
                 </GroupExpressions>
               </Group>
               <SortExpressions>
                 <SortExpression>
-                  <Value>=Fields!execution_id.Value</Value>
+                  <Value>=Fields!shortStartTime.Value</Value>
                 </SortExpression>
               </SortExpressions>
-              <Label>=Fields!execution_id.Value</Label>
+              <Label>=Fields!shortStartTime.Value</Label>
             </ChartMember>
           </ChartMembers>
         </ChartCategoryHierarchy>
@@ -739,6 +739,7 @@
                   <ChartDataLabel>
                     <Style />
                   </ChartDataLabel>
+                  <ToolTip>=Sum(Fields!execution_id.Value)</ToolTip>
                   <Style />
                   <ChartMarker>
                     <Style />
@@ -771,10 +772,10 @@
             <ChartCategoryAxes>
               <ChartAxis Name="Primary">
                 <Style>
-                  <FontSize>8pt</FontSize>
+                  <FontSize>9pt</FontSize>
                 </Style>
                 <ChartAxisTitle>
-                  <Caption>Execution ID</Caption>
+                  <Caption />
                   <Style>
                     <FontSize>8pt</FontSize>
                   </Style>
@@ -801,6 +802,13 @@
                 <CrossAt>NaN</CrossAt>
                 <Minimum>NaN</Minimum>
                 <Maximum>NaN</Maximum>
+                <Angle>-45</Angle>
+                <PreventFontShrink>true</PreventFontShrink>
+                <PreventFontGrow>true</PreventFontGrow>
+                <PreventLabelOffset>true</PreventLabelOffset>
+                <PreventWordWrap>true</PreventWordWrap>
+                <AllowLabelRotation>Rotate45</AllowLabelRotation>
+                <LabelsAutoFitDisabled>true</LabelsAutoFitDisabled>
                 <ChartAxisScaleBreak>
                   <Style />
                 </ChartAxisScaleBreak>
@@ -921,24 +929,6 @@
             </Style>
           </ChartArea>
         </ChartAreas>
-        <ChartLegends>
-          <ChartLegend Name="Default">
-            <Style>
-              <BackgroundGradientType>None</BackgroundGradientType>
-              <FontSize>8pt</FontSize>
-            </Style>
-            <ChartLegendTitle>
-              <Caption />
-              <Style>
-                <FontSize>8pt</FontSize>
-                <FontWeight>Bold</FontWeight>
-                <TextAlign>Center</TextAlign>
-              </Style>
-            </ChartLegendTitle>
-            <HeaderSeparatorColor>Black</HeaderSeparatorColor>
-            <ColumnSeparatorColor>Black</ColumnSeparatorColor>
-          </ChartLegend>
-        </ChartLegends>
         <ChartTitles>
           <ChartTitle Name="Default">
             <Caption>=First(Fields!package_name.Value, "ExecutionInformation") &amp; " Execution Time"</Caption>
@@ -968,7 +958,7 @@
         </ChartNoDataMessage>
         <DataSetName>Last10SuccessfulExecs</DataSetName>
         <Top>1.22945in</Top>
-        <Height>2.5in</Height>
+        <Height>4.5743in</Height>
         <Width>7.53125in</Width>
         <ZIndex>3</ZIndex>
         <Style>
@@ -1166,7 +1156,7 @@
         </Style>
       </Textbox>
     </ReportItems>
-    <Height>5.2725in</Height>
+    <Height>5.80375in</Height>
     <Style />
   </Body>
   <Width>13.1146in</Width>
@@ -1375,7 +1365,7 @@ ORDER BY
 	CONVERT(FLOAT, DATEDIFF(millisecond, a.[start_time], ISNULL(a.[end_time], SYSDATETIMEOFFSET())))/1000 AS duration
 FROM [catalog].[executions] a, [catalog].[executions] b
 WHERE b.[execution_id] = @ExecutionID AND
-	a.[status] = 7 AND
+	a.[status] In (2, 7) AND
 	a.[package_name] = b.[package_name] AND 
 	a.[project_name] = b.[project_name] AND
 	a.[folder_name] = b.[folder_name]
